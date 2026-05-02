@@ -60,7 +60,7 @@ export const ExecutionLog: React.FC<ExecutionLogProps> = ({ campaignId }) => {
     const fetchLogs = async () => {
         if (DEMO_MODE_ENABLED()) {
             // In Demo Mode, show execution schedule as logs
-            setLogs(DEMO_CAMPAIGN.execution_schedule as any[]);
+            setLogs(DEMO_CAMPAIGN.execution_schedule as ScheduleEntry[]);
             return;
         }
 
@@ -88,7 +88,7 @@ export const ExecutionLog: React.FC<ExecutionLogProps> = ({ campaignId }) => {
                 // Filter demo logs for this specific entry/channel if possible, 
                 // or just show a relevant subset based on the entry's channel
                 // DEMO_CAMPAIGN.campaign_logs contains sample logs.
-                const demoLogs = (DEMO_CAMPAIGN.campaign_logs as any[]).filter(l => l.channel === channel);
+                const demoLogs = (DEMO_CAMPAIGN.campaign_logs as LogEntry[]).filter(l => l.channel === channel);
                 // Just take first few to mimic detail look
                 const entryLogs = demoLogs.slice(0, 3).map((l, i) => ({
                     ...l,

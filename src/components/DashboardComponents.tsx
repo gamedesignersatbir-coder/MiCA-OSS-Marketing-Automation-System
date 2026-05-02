@@ -209,8 +209,17 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 };
 
 // Social Post Card with Image
+interface SocialPost {
+    id: string;
+    caption: string;
+    hashtags: string;
+    scheduled_day: number;
+    image_suggestion: string;
+    image_url?: string;
+}
+
 interface SocialPostCardProps {
-    post: any;
+    post: SocialPost;
     onGenerateImage?: (postId: string, prompt: string) => void;
     generatingImageId?: string | null;
     onCopy?: (id: string, text: string) => void;

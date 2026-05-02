@@ -121,7 +121,8 @@ export const CampaignTimeline: React.FC<CampaignTimelineProps> = ({ campaignId, 
                 .channel(`execution-updates-${campaignId}`)
                 .on('postgres_changes', { event: '*', schema: 'public', table: 'execution_schedule', filter: `campaign_id=eq.${campaignId}` }, (payload) => {
                     if (payload.eventType === 'UPDATE') {
-                        setSchedule(prev => prev.map(e => e.id === (payload.new as any).id ? { ...e, ...(payload.new as any) } : e));
+                        const newRow = payload.new as Partial<ScheduleEntry> & { id: string };
+                        setSchedule(prev => prev.map(e => e.id === newRow.id ? { ...e, ...newRow } : e));
                     } else if (payload.eventType === 'INSERT') {
                         fetchSchedule();
                     }
@@ -178,7 +179,7 @@ export const CampaignTimeline: React.FC<CampaignTimelineProps> = ({ campaignId, 
                     setSchedule([...cur]);
                     if (DEMO_MODE_ENABLED()) {
                         const gi = DEMO_CAMPAIGN.execution_schedule.findIndex(t => t.id === task.id);
-                        if (gi !== -1) DEMO_CAMPAIGN.execution_schedule[gi] = done as any;
+                        if (gi !== -1) DEMO_CAMPAIGN.execution_schedule[gi] = done as unknown as typeof DEMO_CAMPAIGN.execution_schedule[number];
                     }
                     taskIndex++;
                     setTimeout(processNext, 500);
@@ -202,22 +203,29 @@ export const CampaignTimeline: React.FC<CampaignTimelineProps> = ({ campaignId, 
 
         try {
             if (DEMO_MODE_ENABLED()) {
-                let content: any = null;
+                let found = false;
                 if (item.asset_type === 'email_template') {
-                    content = (DEMO_CAMPAIGN.email_templates as any[]).find(e => e.id === item.asset_id);
-                    if (content) setPreviewContent(`**Subject:** ${content.subject}\n\n**Preview:** ${content.pre_header}\n\n${content.body}\n\n_CTA: ${content.cta_text}_`);
+                    const content = DEMO_CAMPAIGN.email_templates.find(e => e.id === item.asset_id);
+                    if (content) {
+                        setPreviewContent(`**Subject:** ${content.subject}\n\n**Preview:** ${content.pre_header}\n\n${content.body}\n\n_CTA: ${content.cta_text}_`);
+                        found = true;
+                    }
                 } else if (item.asset_type === 'whatsapp_message') {
-                    content = (DEMO_CAMPAIGN.whatsapp_messages as any[]).find(m => m.id === item.asset_id);
-                    if (content) setPreviewContent(content.message_text);
+                    const content = DEMO_CAMPAIGN.whatsapp_messages.find(m => m.id === item.asset_id);
+                    if (content) {
+                        setPreviewContent(content.message_text);
+                        found = true;
+                    }
                 } else if (item.asset_type === 'social_post') {
-                    content = (DEMO_CAMPAIGN.social_posts as any[]).find(p => p.id === item.asset_id);
+                    const content = DEMO_CAMPAIGN.social_posts.find(p => p.id === item.asset_id);
                     if (content) {
                         setPreviewContent(`${content.caption}\n\n${content.hashtags || ''}`);
                         if (content.image_url) setPreviewImageUrl(content.image_url);
                         if (content.image_suggestion) setPreviewImageAlt(content.image_suggestion);
+                        found = true;
                     }
                 }
-                if (!content) setPreviewContent('Content not found in demo data.');
+                if (!found) setPreviewContent('Content not found in demo data.');
                 return;
             }
             let table = '';

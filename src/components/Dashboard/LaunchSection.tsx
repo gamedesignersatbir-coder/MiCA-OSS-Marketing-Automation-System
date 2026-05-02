@@ -63,9 +63,9 @@ export const LaunchSection: React.FC<LaunchSectionProps> = ({
 
             // Wait for crash down & giggle animation to complete BEFORE setting mode 'idle'
             await new Promise(resolve => setTimeout(resolve, 2400));
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Launch failed:", err);
-            setError(err.message || 'Failed to launch campaign');
+            setError(err instanceof Error ? err.message : 'Failed to launch campaign');
         } finally {
             setIsLaunching(false);
             setMode('idle'); // Reset mode
@@ -96,11 +96,11 @@ export const LaunchSection: React.FC<LaunchSectionProps> = ({
                         return;
                     }
 
-                    const contactsToInsert = rows.map((row: any) => ({
+                    const contactsToInsert = rows.map((row) => ({
                         campaign_id: campaignId,
-                        name: row.name || row.Name || row.full_name || '',
-                        email: row.email || row.Email || row.email_address || '',
-                        phone: row.phone || row.Phone || row.mobile || row.whatsapp || '',
+                        name: String(row.name || row.Name || row.full_name || ''),
+                        email: String(row.email || row.Email || row.email_address || ''),
+                        phone: String(row.phone || row.Phone || row.mobile || row.whatsapp || ''),
                     })).filter(c => c.email || c.phone);
 
                     if (contactsToInsert.length === 0) {
@@ -120,9 +120,9 @@ export const LaunchSection: React.FC<LaunchSectionProps> = ({
                     if (onContactsUploaded) {
                         onContactsUploaded(contactsToInsert.length);
                     }
-                } catch (err: any) {
+                } catch (err: unknown) {
                     console.error('CSV upload failed:', err);
-                    setDialogError(err.message || 'Failed to upload contacts');
+                    setDialogError(err instanceof Error ? err.message : 'Failed to upload contacts');
                 } finally {
                     setDialogIsUploading(false);
                 }

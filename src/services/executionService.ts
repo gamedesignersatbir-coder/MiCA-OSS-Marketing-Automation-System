@@ -141,7 +141,7 @@ export const generateExecutionSchedule = async (campaignId: string) => {
 /**
  * Triggers a webhook with simulation fallback.
  */
-export const triggerWebhook = async (action: 'campaign_launched' | 'send_test', payload: any) => {
+export const triggerWebhook = async (action: 'campaign_launched' | 'send_test', payload: Record<string, unknown>) => {
     let url = '';
 
     if (action === 'campaign_launched') url = WEBHOOK_LAUNCH_URL;
@@ -157,7 +157,7 @@ export const triggerWebhook = async (action: 'campaign_launched' | 'send_test', 
         // If launching, simulate Day 1 execution with visible animation
         if (action === 'campaign_launched') {
             // Don't await — let it run in background so the UI can transition first
-            simulateDay1Execution(payload.campaign_id);
+            simulateDay1Execution(payload.campaign_id as string);
         }
 
         return {

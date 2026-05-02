@@ -1379,7 +1379,22 @@ export const DEMO_CAMPAIGN = {
     ]
 };
 
-export const DEMO_TONE_VARIANTS: any = {
+export const DEMO_TONE_VARIANTS: Record<string, {
+    tone_summary: string;
+    sample_email: {
+        subject: string;
+        opening_paragraph: string;
+    };
+    sample_social_post: {
+        caption: string;
+        post_type: string;
+    };
+    sample_whatsapp: {
+        message: string;
+    };
+    recommended_channels: string[];
+    channel_reasoning: string;
+}> = {
     "Professional": {
         tone_summary: "A credible, authority-driven approach that positions the Happiness Program as a tool for cognitive optimization and emotional intelligence in leadership. We focus on the science, productivity, and evidence-based results. The language is direct and respectful.",
         sample_email: {
