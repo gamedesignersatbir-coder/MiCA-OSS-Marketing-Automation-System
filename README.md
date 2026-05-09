@@ -22,9 +22,11 @@ MiCA is an open-source marketing automation tool: Give it a description about yo
 
 ![Campaign dashboard with HeyGen avatar video](./docs/screenshots/03-dashboard-overview.png)
 *The dashboard — a HeyGen avatar introduces your campaign, the strategy is laid out (methodology, duration, budget), and one click launches across channels.*
+
 <img width="2038" height="1196" alt="Screenshot 2026-05-09 at 12 38 16 PM" src="https://github.com/user-attachments/assets/ddb0498e-4422-40be-a611-496d2c6beeb1" />
 
 <img width="2052" height="1222" alt="Screenshot 2026-05-09 at 12 38 56 PM" src="https://github.com/user-attachments/assets/8cb3e95f-ec0b-4801-bb64-2597f86facd3" />
+
 
 
 ![Instagram posts with AI-generated images](./docs/screenshots/04-dashboard-instagram.png)
