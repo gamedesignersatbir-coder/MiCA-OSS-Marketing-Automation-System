@@ -15,10 +15,14 @@ export const DemoModeToggle: React.FC = () => {
     };
 
     useEffect(() => {
-        // Set VITE_HIDE_DEMO_CONTROLS=true to hide the toggle in production builds.
-        const hideControls = import.meta.env.VITE_HIDE_DEMO_CONTROLS === 'true';
+        // VITE_FORCE_DEMO_MODE locks the deployment into demo-only mode (public
+        // marketing site). VITE_HIDE_DEMO_CONTROLS hides the toggle without
+        // forcing demo mode. Either one disables the toggle and shortcut.
+        const forced = import.meta.env.VITE_FORCE_DEMO_MODE === 'true';
+        const hideControls = forced || import.meta.env.VITE_HIDE_DEMO_CONTROLS === 'true';
         if (hideControls) {
             setIsVisible(false);
+            return;
         }
 
         // Keyboard shortcut listener

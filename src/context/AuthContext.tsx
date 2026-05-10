@@ -77,7 +77,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const signOut = async () => {
-        localStorage.removeItem('mica_demo_mode');
+        // Preserve the demo flag on the public force-demo deployment so the user
+        // is still in demo mode after "logging out".
+        if (import.meta.env.VITE_FORCE_DEMO_MODE !== 'true') {
+            localStorage.removeItem('mica_demo_mode');
+        }
         await supabase.auth.signOut();
         // Force reload to clear any demo state
         window.location.href = '/login';
